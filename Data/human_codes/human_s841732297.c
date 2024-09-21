@@ -1,0 +1,19 @@
+n,C[1000000];
+p,m,X,i;
+main(){
+	for(i=2;i<1000000;i++){
+		if(!C[i])
+			for(m=i*2;m<1000000;m+=i)
+				C[m]=1;
+	}
+	for(;scanf("%d",&n),n;){
+		X=-n;
+		for(;n--;){
+			scanf("%d%d",&p,&m);
+			for(i=p-m;i<=p+m;i++)
+				X+=i>1&&i<1000000?!C[i]:0;
+		}
+		printf("%d \n",X);
+	}
+	exit(0);
+}

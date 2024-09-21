@@ -1,0 +1,1 @@
+double s,x,y,X,Y;a;main(){for(;~scanf("%lf,%lf",&x,&y);X=x,Y=y)s+=X*y-x*Y;a=!printf("%f\n",s/-2);}

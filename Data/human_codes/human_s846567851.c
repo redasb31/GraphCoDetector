@@ -1,0 +1,1 @@
+a[9];main(z,n,m,i){for(;scanf("%d%d",&m,&n)*n;puts(a))for(*a=1;~n--;)for(i=18;i;a[i]=~n?a[i+1]+=z*m/1e4,z*m%10000:z&&!printf("%d%.3s",z,51-i*3+"MtsFksNytAsgGgsGokSaiSeiKanKo\0JouJo\0GaiKeiChoOkuMan"))z=a[--i];}

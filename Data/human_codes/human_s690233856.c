@@ -1,0 +1,54 @@
+#include<stdio.h>
+int main(void){
+	int n,m,p,i,d,eki[10000],prdx=0,j,kyo,kuma=0;
+	scanf("%d%d%d",&n,&m,&p);
+	prdx=m;
+	for(i=0;i<m;i++){
+		scanf("%d",&eki[i]);
+	}
+	while(0<prdx){
+		for(i=0;i<prdx;i++){
+			if(eki[0]<p){
+				eki[i]=n-(p-eki[i]);
+			}
+			else{
+				eki[i]=eki[i]-p;
+			}
+		}
+		for(i=0;i<prdx;i++){
+			for(j=i+1;j<prdx;j++){
+				if(eki[i]>eki[j]){
+					kyo=eki[i];
+					eki[i]=eki[j];
+					eki[j]=kyo;
+				}
+			}
+		}
+		for(i=0;i<prdx;i++){
+			for(j=prdx-1;j>=0;j--){
+				if(eki[i]>n-eki[j]){
+					kuma=kuma+n-eki[j];
+					p=eki[j];
+					i=n+1;
+					j=-99;
+					prdx--;
+				}
+				else if(eki[i]<n-eki[j]){
+					kuma=kuma+eki[i];
+					p=eki[i];
+					i=n+1;
+					j=-99;
+					prdx--;
+				}
+			}
+		}
+		for(i=0;i<m;i++){
+			if(eki[i]==p){
+				eki[i]=eki[prdx];
+				i=n+1;
+			}
+		}
+	}
+	printf("%d\n",kuma*100);
+	return 0;
+}

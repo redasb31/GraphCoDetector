@@ -1,0 +1,50 @@
+#include<stdio.h>
+int MIN(int a,int b){return a<b?a:b;}
+int ta[1010],to[1000010],nt[1000010],co[1000010],F[1010];
+int MF(int s,int t,int e,int min){
+  if(s==t||min==0)return min;
+  int i,r;
+  F[s]=1;
+  for(i=ta[s];i+1;i=nt[i]){
+    if(F[to[i]])continue;
+    r=MF(to[i],t,e,MIN(min,co[i]));
+    co[i]-=r;
+    co[(i+e)%(2*e)]+=r;
+    if(r)return r;
+  }
+  return 0;
+}
+//???????????????
+//s??????t???????????§???????±?????????????????????°v????????°e???a??????b????????£???c????????????????????????
+int maxf(int s,int t,int v,int e,int *a,int *b,int *c){
+  int i,f,r;
+  for(i=0;i<v;i++)ta[i]=-1;
+  for(i=0;i<e;i++){
+    nt[i  ]=ta[to[i+e]=a[i]];
+    nt[i+e]=ta[to[i  ]=b[i]];
+    co[ta[a[i]]=i  ]=c[i];
+    co[ta[b[i]]=i+e]=0;
+  }
+  for(f=0;r=MF(s,t,e,1000000000);f+=r){
+    for(i=0;i<v;i++)F[i]=0;
+  }
+  return f;
+}int main(){
+  int n,a[3010],b[3010],c[3010],m,r=0,i;
+  scanf("%d",&n);
+  for(i=1;i<n;i++){
+    scanf("%d",&m);
+    if(m){
+      a[r  ]=i;
+      b[r  ]=n;
+      c[r++]=1e9;
+    }
+  }
+  for(i=1;i<n;i++){
+    scanf("%d %d %d",&a[r],&b[r],&c[r]);
+    r++;
+  }
+  printf("%d\n",maxf(0,n,n+1,r,a,b,c));
+  return 0;
+}
+    

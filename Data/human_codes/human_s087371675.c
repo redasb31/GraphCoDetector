@@ -1,0 +1,1 @@
+n;m;k;l;main(h,w){scanf("%d%d",&h,&w);n=h/2;k=w/2;m=h/3;l=w/3;printf("%d %d %d %d\n",n,m,k,l);printf("%.f",h%3&&w%3?h%2?w%2?fmin(fmin(w%3-1|l<h?(n>l?n:l)+l+1:h+l,h%3-1|m<w?(k>m?k:m)+m+1:w+m),h<w?h:w):k:n:0);}

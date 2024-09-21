@@ -1,0 +1,1 @@
+b[],a,C;main(){for(;~scanf("%s",a?b:&a);)strstr(strcat(strdup(b),b),&a)&&C++;C=!printf("%d\n",C);}

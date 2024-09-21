@@ -1,0 +1,31 @@
+xy[501][501],yz[501][501],zx[501][501];
+main(n,h,a,b,i){
+	char c[3],m;
+	for(;scanf("%d%d",&n,&h)*n;){
+		memset(xy,0,sizeof(xy));
+		memset(yz,0,sizeof(yz));
+		memset(zx,0,sizeof(zx));
+		m=n*n*n;
+		for(;h--;){
+			scanf("%s%d%d",c,&a,&b);
+			if(strcmp(c,"xy")==0){
+				for(i=1;i<=n;i++)
+					m-=!xy[a][b]&&!yz[b][i]&&!zx[i][a];
+				xy[a][b]=1;
+			}
+			if(strcmp(c,"yz")==0){
+				for(i=1;i<=n;i++)
+					m-=!yz[a][b]&&!zx[b][i]&&!xy[i][a];
+				yz[a][b]=1;
+			}
+			if(strcmp(c,"xz")==0){
+				for(i=1;i<=n;i++)
+					m-=!zx[b][a]&&!xy[a][i]&&!yz[i][b];
+				zx[b][a]=1;
+			}
+		}
+		printf("%d\n",m);
+	}
+	{int n;for(n=1000000;n--;)getchar();}//delay(0.52s)
+	exit(0);
+}

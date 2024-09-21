@@ -1,0 +1,1 @@
+a=127;main(n,d){for(gets(&d);~scanf("%d%d",&n,&d);)printf("%d\n",a*~-n+(n%2?d:d^a));}

@@ -1,0 +1,1 @@
+c;main(){long x,y;for(scanf("%ld",&x,&y);x<=y;c++,x*=2);printf("%d",c);}

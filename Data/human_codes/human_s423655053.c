@@ -1,0 +1,1 @@
+a[1<<17],m;main(n,v,i){for(;scanf("%d",&n)*n;printf("%d\n",n)){for(i=0;i++<n;a[m]++)scanf("%d",&v),a[m+=v^m%2]|i%2||(a[v=m>1?m-2:m]+=a[m-1],a[m-1]=0,m=v);for(;n-=m%2*a[m],m;)a[m--]=0;}}

@@ -1,0 +1,1 @@
+c[2];i;m;main(j,s)char*s;{gets(s);for(gets(s);s[++i];m=fmax(__builtin_popcount(*c&=c[1]),m))for(*c=c[1]=j=0;s[j];)c[j<i]|=1<<s[j++]-97;printf("%d",m);}
