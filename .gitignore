@@ -1,0 +1,6 @@
+**/__pycache__
+**/codenet_c_all_solutions/*
+res.txt
+*.pkl
+*.log
+**/outputs/*
