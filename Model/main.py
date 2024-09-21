@@ -123,7 +123,7 @@ if __name__ == '__main__':
     torch.manual_seed(args.seed)  
     exp_init()
 
-    root_dir = os.path.join("..","Data","graphs")
+    root_dir = os.path.join("..","Data","function_level_graphs")
 
     IO = IOStream('outputs/' + args.exp_name + '/run.log')
     IO.cprint(str(table_printer(args))) 

@@ -5,6 +5,7 @@ import torch
 model_name = "microsoft/codebert-base"
 tokenizer = RobertaTokenizer.from_pretrained(model_name)
 model = RobertaModel.from_pretrained(model_name)
+embedding_size = model.config.hidden_size
 
 node_types= ['function_definition', 'function_declarator', 'compound_statement', 'ret_type', 'identifier', 'parameter_list', 'declaration', 'while_statement', 'parameter_declaration', 'primitive_type', 'init_declarator', 'while', 'parenthesized_expression', 'array_declarator', 'pointer_declarator', '=', 'binary_expression', 'if_statement', 'number_literal', '*', '<', 'if', 'else', 'expression_statement', 'for_statement', 'switch_statement', 'subscript_expression', '==', 'char_literal', 'call_expression', 'update_expression', 'for', 'assignment_expression', 'switch', 'argument_list', '++', 'case_statement', '+', '!=', '&&', 'case', 'break_statement', '-', '>=', '<=', 'break', '--', 'return_statement', 'return', 'string_literal', 'pointer_expression', '&', 'type_identifier', 'field_expression', 'field_identifier', 'sizeof_expression', 'conditional_expression', 'sizeof', 'type_descriptor', '+=', '>', 'sized_type_specifier', 'struct_specifier', '/', '%', 'long', 'struct', 'null', '||', 'type_qualifier', 'cast_expression', 'const', 'abstract_pointer_declarator', 'true', 'false', 'comma_expression', '%=', '^', '&=', 'unary_expression', '!', 'initializer_list', '/=', '<<', '-=', 'continue_statement', 'continue', '*=', 'default', 'compound_literal_expression', 'unsigned', '~', 'labeled_statement', 'statement_identifier', 'goto_statement', 'goto', '>>', '^=', 'abstract_function_declarator', 'abstract_parenthesized_declarator', '|', '>>=', 'initializer_pair', 'field_designator', 'do_statement', 'do', '|=', 'storage_class_specifier', 'static','unknown','VNode']
 
@@ -15,7 +16,6 @@ def get_embedding(code):
     input_ids = inputs["input_ids"].squeeze(0)
     weight = len(inputs["input_ids"].squeeze(0)) // 6
     attention_mask = inputs["attention_mask"].squeeze(0)
-
     chunk_size = 512
     stride = 256
 
@@ -44,18 +44,20 @@ def get_embedding(code):
     return embedding,weight
 
 def get_initial_embedding_cpg_node(cpg_node,source_code):
-    code = "None"
     if isinstance(cpg_node, dict):
-        start,end = [int(i) for i in cpg_node.get('idx', "0:0").split(':')]
-        code = source_code[start:end]
-
-        if code == "" or code ==" ":
-            code = "None"
+        if cpg_node.get('idx', "0:0") == "VNode_idx":
+            code = ""
+        else:
+            start,end = [int(i) for i in cpg_node.get('idx', "0:0").split(':')]
+            code = source_code[start:end]
         node_type = cpg_node['type']
     else:
         raise ValueError
-
-    code_embedding,weight = get_embedding(code)
+    
+    if code == "" or code ==" ":
+        code_embedding,weight = [torch.zeros(embedding_size),0]
+    else:
+        code_embedding,weight = get_embedding(code)
     if node_type in node_types:
         node_type_index = node_types.index(node_type)
     else:

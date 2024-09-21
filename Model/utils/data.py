@@ -8,11 +8,12 @@ from .node_embedding import get_initial_embedding_cpg_node
 import pickle
 
 class GraphDataset(Dataset):
-    def __init__(self, root_dir, save_dir = "pickle_data"):
-        self.l = 50
+    def __init__(self, root_dir, save_dir = "pickle_data",function_level=False):
+        self.l = 3000
         self.save_dir = save_dir
         self.graph_files = [os.path.join(root_dir, f) for f in os.listdir(root_dir) if f.endswith('.json')][:self.l]
         self.saved_files = [f.split("/")[-1].split('.')[0] for f in os.listdir(save_dir)]
+        self.function_level = function_level
 
     def __len__(self):
         return len(self.graph_files)
@@ -29,10 +30,20 @@ class GraphDataset(Dataset):
         else:
             self.saved_files.append(fname)
             graph_json = json.load(open(self.graph_files[idx]))
-            graph = create_graph(graph_json)
+            graph = create_graph(graph_json,function_level = self.function_level)
             pickle.dump(graph, open(fpath, 'wb'))
 
         return graph 
+
+def add_vnode(graph_json):
+    Vnode = {"VNode":{"type":"VNode","idx":"VNode_idx"}}
+    nodes_keys = graph_json["nodes"].keys()
+    new_edges = [{'edge':[key,"VNode"],'type':'000'} for key in nodes_keys]
+    edges = graph_json['edges'] + new_edges
+    graph_json['nodes'].update(Vnode)
+    graph_json['edges'] = edges
+
+    
 
 def merge_functions(graph_json):
     nodes_keys=[]
@@ -50,9 +61,13 @@ def merge_functions(graph_json):
 
     return {'nodes': nodes, 'edges': edges,'label': graph_json['label'],"code":graph_json['code']}
 
-def create_graph(graph_json):
+def create_graph(graph_json,function_level = False):
 
-    graph_json = merge_functions(graph_json)
+    if not function_level:
+        graph_json = merge_functions(graph_json)
+
+
+    add_vnode(graph_json)
     
     code = graph_json['code']
 
@@ -82,9 +97,9 @@ def create_graph(graph_json):
     
     return Data(x=x, edge_index=edge_index, edge_attr=edge_types, y=y, w=w, code = code)
 
-def load_graph_data(root_dir='all_data', batch_size=16, seed=16, num_workers=0):
+def load_graph_data(root_dir='all_data', batch_size=16, seed=16, num_workers=0,function_level=False):
     # Create the dataset
-    dataset = GraphDataset(root_dir)
+    dataset = GraphDataset(root_dir,function_level=function_level)
 
     # Split the dataset into training and test sets
     train_dataset, test_dataset = train_test_split(dataset, test_size=0.2, random_state=seed)
@@ -102,7 +117,7 @@ def load_graph_data(root_dir='all_data', batch_size=16, seed=16, num_workers=0):
     return train_loader, test_loader, num_node_features, num_edge_features
 
 def load_graphs(args,root_dir='all_data'):
-    return load_graph_data(batch_size=args.train_batch_size, seed=args.seed, root_dir=root_dir)
+    return load_graph_data(batch_size=args.train_batch_size, seed=args.seed, root_dir=root_dir, function_level=args.function_level)
 
 if __name__ == '__main__':
     train_loader, test_loader = load_graph_data('all_data', batch_size=16, seed=42)

@@ -14,7 +14,7 @@ from utils.distance import *
 
 
 class MLP(nn.Module):
-    def __init__(self, input_size, hidden_sizes = [128, 64], output_size=1):
+    def __init__(self, input_size, hidden_sizes = [64, 32], output_size=1):
         super(MLP, self).__init__()
         self.layers = nn.ModuleList()
         self.layers.append(nn.Linear(input_size, hidden_sizes[0]))
@@ -159,6 +159,8 @@ class GraphCoDetector(nn.Module):
         xc = self.SCRM_out_lin(xc)
 
         x = torch.cat((xc,x), dim=1)
+        with open('cat.txt','a') as f:
+            f.write(str(x))
 
         # Pass combined features through the final MLP
         x = self.Classifier(x)
