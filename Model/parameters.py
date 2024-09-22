@@ -6,8 +6,8 @@ class Args:
     def __init__(self):
         self.seed = 2025
         self.exp_name = 'Func_level'
-        self.train_batch_size = 4
-        self.test_batch_size = 4
+        self.train_batch_size = 1
+        self.test_batch_size = 1
         self.gpu_index = -1
         self.epochs = 10
         self.lr = 0.001

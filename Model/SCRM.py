@@ -5,6 +5,7 @@ import re
 # Load pretrained CodeBERT model and tokenizer
 tokenizer = RobertaTokenizer.from_pretrained("microsoft/codebert-base")
 model = RobertaModel.from_pretrained("microsoft/codebert-base")
+embedding_size = model.config.hidden_size
 
 def get_embedding(code):
     
@@ -77,13 +78,14 @@ def SCRM(code_list):
 
   embeddings = []
   for code in code_list:
-      comments, code_without_comments = extract_comments(code)
-      code_embedding = get_embedding(code_without_comments)
-      if len(comments) == 0:
-          comments = "None"
-      comments_embedding = get_embedding(comments)
-      embedding = torch.cat([code_embedding, comments_embedding])
-      embeddings.append(embedding)
+        comments, code_without_comments = extract_comments(code)
+        code_embedding = get_embedding(code_without_comments)
+        if len(comments.strip()) == 0:
+            comments_embedding = torch.zeros(embedding_size)
+        else:
+            comments_embedding = get_embedding(comments)
+        embedding = torch.cat([code_embedding, comments_embedding])
+        embeddings.append(embedding)
 
   return torch.stack(embeddings)
 

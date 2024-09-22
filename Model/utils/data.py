@@ -9,7 +9,7 @@ import pickle
 
 class GraphDataset(Dataset):
     def __init__(self, root_dir, save_dir = "pickle_data",function_level=False):
-        self.l = 3000
+        self.l = 200
         self.save_dir = save_dir
         self.graph_files = [os.path.join(root_dir, f) for f in os.listdir(root_dir) if f.endswith('.json')][:self.l]
         self.saved_files = [f.split("/")[-1].split('.')[0] for f in os.listdir(save_dir)]

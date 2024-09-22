@@ -115,7 +115,7 @@ class GCRM(nn.Module):
             x = layer(x, edge_attr, b, edge_paths, ptr)
 
 
-        x = global_mean_pool(x, data.batch)
+        x = x[-1].unsqueeze(0)
 
         return x
     

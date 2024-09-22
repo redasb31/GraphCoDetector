@@ -16,8 +16,8 @@ def train(args, IO, train_loader, num_node_features, num_edge_features):
     device = torch.device('cpu' if args.gpu_index<0  else 'cuda:{}'.format(args.gpu_index))
     if args.gpu_index < 0:
         IO.cprint('Using CPU')
-    model = GraphCoDetector(args, num_node_features, num_edge_features).to(device)
-    # model = torch.load('outputs/%s/model.pth' % args.exp_name).to(device)
+    # model = GraphCoDetector(args, num_node_features, num_edge_features).to(device)
+    model = torch.load('outputs/%s/model.pth' % args.exp_name).to(device)
     IO.cprint(str(model))
     total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     IO.cprint('Model Parameter: {}'.format(total_params))
